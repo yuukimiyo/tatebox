@@ -1,14 +1,13 @@
 import React, { ReactNode } from 'react'
-import Link from 'next/link'
 import Head from 'next/head'
-import Navbar from './Navbar'
 
 type Props = {
   children?: ReactNode
   title?: string
+  copyright?: string
 }
 
-const Layout = ({ children, title = 'This is the default title' }: Props) => (
+const Layout = ({ children, title = 'Default title', copyright = '(c) yourname' }: Props) => (
   <div>
     <Head>
       <title>{title}</title>
@@ -16,12 +15,10 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <header>
-      <Navbar />
     </header>
     {children}
     <footer>
-      <hr />
-      <span>I'm here to stay (Footer)</span>
+      <span>{copyright}</span>
     </footer>
   </div>
 )

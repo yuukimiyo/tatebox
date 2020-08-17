@@ -1,19 +1,20 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 
-import { User } from '../../interfaces'
-import { sampleUserData } from '../../utils/sample-data'
-import Layout from '../../components/Layout'
-import ListDetail from '../../components/ListDetail'
+import { Card } from '../../../interfaces'
+import { sampleCardData } from '../../../utils/sample-data'
+import CardLayout from '../../../components/CardLayout'
+import Layout from '../../../components/Layout'
+import CardView from '../../../components/CardView'
 
 type Props = {
-  item?: User
+  item?: Card
   errors?: string
 }
 
-const StaticPropsDetail = ({ item, errors }: Props) => {
+const StaticCard = ({ item, errors }: Props) => {
   if (errors) {
     return (
-      <Layout title="Error | Next.js + TypeScript Example">
+      <Layout title="Error">
         <p>
           <span style={{ color: 'red' }}>Error:</span> {errors}
         </p>
@@ -22,22 +23,20 @@ const StaticPropsDetail = ({ item, errors }: Props) => {
   }
 
   return (
-    <Layout
-      title={`${
-        item ? item.name : 'User Detail'
-      } | Next.js + TypeScript Example`}
+    <CardLayout
+      title={`${ item ? item.title : 'No Title.' }`}
     >
-      {item && <ListDetail item={item} />}
-    </Layout>
+      {item && <CardView item={item} />}
+    </CardLayout>
   )
 }
 
-export default StaticPropsDetail
+export default StaticCard
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  // Get the paths we want to pre-render based on users
-  const paths = sampleUserData.map((user) => ({
-    params: { id: user.id.toString() },
+  // この処理により、build時に全cardのhtmlが生成される？
+  const paths = sampleCardData.map((card) => ({
+    params: { cid: card.cid.toString() },
   }))
 
   // We'll pre-render only these paths at build time.
@@ -50,8 +49,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 // direct database queries.
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const id = params?.id
-    const item = sampleUserData.find((data) => data.id === Number(id))
+    const cid = params?.cid
+    const item = sampleCardData.find((data) => data.cid === Number(cid))
     // By returning { props: item }, the StaticPropsDetail component
     // will receive `item` as a prop at build time
     return { props: { item } }
